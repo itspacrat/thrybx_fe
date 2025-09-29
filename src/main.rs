@@ -2,7 +2,7 @@ use {
     core::f32,
     // iced stuff to visually show the implementation and make it interactive
     iced::{
-        Element, Settings, alignment, run, widget::{button, column, row, slider, text}, window
+        Alignment, Element, Length::Fill, Settings, alignment, run, widget::{button, column, container, row, slider, text}, window
     },
     // audio sources and players to use the thrybx structures
     rodio::{OutputStream, buffer::SamplesBuffer, source::Source},
@@ -47,22 +47,32 @@ fn update(app_state: &mut AppState, message: Message) {
 }
 
 fn view(app_state: &AppState) -> Element<Message> {
-    let mut grid: Element<_> = column![
+    let mut grid: Element<_> = container(
         row![
-            button(text("-")).on_press(Message::Decrement1),
             text(app_state.counter1),
-            button(text("+")).on_press(Message::Increment1)
-        ].align_y(alignment::Vertical::Center)
-        .spacing(80),
-        row![
-            button(text("-")).on_press(Message::Decrement2),
-            text(app_state.counter2),
-            button(text("+")).on_press(Message::Increment2)
-        ].align_y(alignment::Vertical::Center)
-        .spacing(30),
-        row![button(text("subtract from both")).on_press(Message::DecrementBoth)].spacing(40)
-    ].spacing(20).align_x(alignment::Horizontal::Center)
+            text(app_state.counter2)
+            ].spacing(20)
+    ).width(Fill).height(Fill)
+    .align_x(Alignment::Center).align_y(Alignment::Center)
     .into();
+    // container(column![
+    //     row![
+    //         button(text("-")).on_press(Message::Decrement1),
+    //         text(app_state.counter1),
+    //         button(text("+")).on_press(Message::Increment1)
+    //     ].align_y(alignment::Vertical::Center)
+    //     .spacing(80).width(Fill),
+    //     row![
+    //         button(text("-")).on_press(Message::Decrement2),
+    //         text(app_state.counter2),
+    //         button(text("+")).on_press(Message::Increment2)
+    //     ].align_y(alignment::Vertical::Center)
+    //     .spacing(30).width(Fill),
+    //     row![
+    //         button(text("subtract from both")).on_press(Message::DecrementBoth)
+    //         ].spacing(40)
+    // ].spacing(20).align_x(alignment::Horizontal::Center).height(Fill))
+    // .into();
     grid // send 'er out
 }
 
