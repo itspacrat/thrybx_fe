@@ -14,21 +14,32 @@ use {
 /*
 ! ICED SETUP
 */
+
+#[derive(Default)]
 pub struct AppState {
     counter1: i64,
     counter2: i64,
 }
 #[derive(Debug, Clone)]
 enum Message {
-    Increment,
-    Decrement,
+    Increment1,
+    Decrement1,
+    Increment2,
+    Decrement2,
+    DecrementBoth,
     Unhide,
 }
 
-fn update(appState: &mut AppState, message: Message) {
+fn update(app_state: &mut AppState, message: Message) {
     match message {
-        Message::Increment => *counter += 1,
-        Message::Decrement => *counter -= 1,
+        Message::Increment1 => app_state.counter1 += 1,
+        Message::Increment2 => app_state.counter2 += 1,
+        Message::Decrement1 => app_state.counter1 -= 1,
+        Message::Decrement2 => app_state.counter2 -= 1,
+        Message::DecrementBoth => {
+            app_state.counter1 -= 1;
+            app_state.counter2 -= 1;
+        }
         Message::Unhide => {
             println!("unhidden")
         }
@@ -38,18 +49,18 @@ fn update(appState: &mut AppState, message: Message) {
 fn view(app_state: &AppState) -> Element<Message> {
     let mut grid: Element<_> = column![
         row![
-            button(text("-")).on_press(Message::Decrement),
-            text(counter),
-            button(text("+")).on_press(Message::Increment)
+            button(text("-")).on_press(Message::Decrement1),
+            text(app_state.counter1),
+            button(text("+")).on_press(Message::Increment1)
         ].align_y(alignment::Vertical::Center)
-        .spacing(50),
+        .spacing(80),
         row![
-            button(text("-")).on_press(Message::Decrement),
-            text(counter),
-            button(text("+")).on_press(Message::Increment)
+            button(text("-")).on_press(Message::Decrement2),
+            text(app_state.counter2),
+            button(text("+")).on_press(Message::Increment2)
         ].align_y(alignment::Vertical::Center)
         .spacing(30),
-        row![button(text("press")).on_press(Message::Decrement)].spacing(40)
+        row![button(text("subtract from both")).on_press(Message::DecrementBoth)].spacing(40)
     ].spacing(20).align_x(alignment::Horizontal::Center)
     .into();
     grid // send 'er out
